@@ -26,3 +26,10 @@ model Authorization {
   consumer   Consumer @relation(fields: [consumerId], references: [id])
   consumerId String
 }
+
+model Topic {
+  id       String   @id
+  createAt DateTime
+  updateAt DateTime
+  name     String
+}
