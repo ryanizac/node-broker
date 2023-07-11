@@ -18,6 +18,11 @@ export class TopicRepository {
       },
     });
   }
+
+  static async readAll() {
+    const list = await db.topic.findMany();
+    return list;
+  }
 }
 
 export namespace TopicRepository {
