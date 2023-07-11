@@ -1,7 +1,7 @@
-import { Consumer } from "../entities";
+import { Authorization, Consumer } from "../entities";
 import { ClientError } from "../errors";
-import { createConsumer } from "../factories";
-import { ConsumerRepository } from "../repositories";
+import { createConsumer, createAuthorization } from "../factories";
+import { AuthorizationRepository, ConsumerRepository } from "../repositories";
 import { ValidateString } from "../validators";
 
 export async function CreateConsumer(
@@ -18,11 +18,17 @@ export async function CreateConsumer(
   }
 
   const consumer = createConsumer({ name });
-  const consumerProps = consumer.props;
+  const consumerId = consumer.props.id;
 
-  await ConsumerRepository.create(consumerProps);
+  const authorization = createAuthorization({ consumerId });
 
-  return { consumer: consumerProps };
+  await ConsumerRepository.create(consumer.props);
+  await AuthorizationRepository.create(authorization.props);
+
+  return {
+    consumer: consumer.props,
+    authorization: authorization.toPublic(),
+  };
 }
 
 export namespace CreateConsumer {
@@ -32,5 +38,6 @@ export namespace CreateConsumer {
 
   export type Result = {
     consumer: Consumer.Public;
+    authorization: Authorization.Public;
   };
 }
