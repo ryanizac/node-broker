@@ -12,6 +12,13 @@ export class AuthorizationRepository {
       },
     });
   }
+
+  static async findByToken(token: string) {
+    const found = await db.authorization.findFirst({
+      where: { token },
+    });
+    return found;
+  }
 }
 
 export namespace AuthorizationRepository {

@@ -7,6 +7,19 @@ export class JWTGenerator {
   static generate(data: JWTGenerator.Payload): string {
     return jwt.sign(data, this.SECRET);
   }
+
+  static decode(token: string): JWTGenerator.Payload | null {
+    try {
+      const payload = jwt.verify(token, this.SECRET) as JWTGenerator.Payload;
+      return payload;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  static check(token: string): boolean {
+    return !!this.decode(token);
+  }
 }
 
 export namespace JWTGenerator {
